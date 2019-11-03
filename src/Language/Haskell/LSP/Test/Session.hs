@@ -297,7 +297,8 @@ updateState (ReqApplyWorkspaceEdit r) = do
             liftIO $ B.hPut (serverIn ctx) $ addHeader (encode msg)
 
             modifyM $ \s -> do
-              newVFS <- liftIO $ openVFS (vfs s) msg
+              let (newVFS,_ls) = openVFS (vfs s) msg
+              -- mapM_ logm ls
               return $ s { vfs = newVFS }
 
         getParams (TextDocumentEdit docId (List edits)) =
